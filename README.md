@@ -1,2 +1,7 @@
-run server: npm run dev
-run client: npm start
+## to run server:
+
+npm run dev
+
+## to run client:
+
+npm start
