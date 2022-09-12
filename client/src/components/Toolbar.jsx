@@ -16,8 +16,8 @@ const Toolbar = observer(() => {
   const [sessionId, setSessionId] = useState(null);
 
   const changeColor = (e) => {
-    const color = e.target.value;
-    toolState.setColor(color);
+    const curColor = e.target.value;
+    toolState.setColor(curColor);
   }
 
   const download = () => {
@@ -38,13 +38,17 @@ const Toolbar = observer(() => {
     }
   }, [canvasState.socket])
 
+  const changeToolTo = (ToolClass) => {
+    toolState.setTool(new ToolClass(canvasState.canvas, socket, sessionId));
+  }
+
   return (
     <div className="toolbar">
-      <button className='toolbar__btn brush' onClick={() => toolState.setTool(new Brush(canvasState.canvas, socket, sessionId))}></button>
-      <button className='toolbar__btn rect' onClick={() => toolState.setTool(new Rect(canvasState.canvas, socket, sessionId))}></button>
-      <button className='toolbar__btn circle' onClick={() => toolState.setTool(new Circle(canvasState.canvas, socket, sessionId))}></button>
-      <button className='toolbar__btn eraser' onClick={() => toolState.setTool(new Eraser(canvasState.canvas, socket, sessionId))}></button>
-      <button className='toolbar__btn line' onClick={() => toolState.setTool(new Line(canvasState.canvas, socket, sessionId))}></button>
+      <button className='toolbar__btn brush' onClick={() => changeToolTo(Brush)}></button>
+      <button className='toolbar__btn rect' onClick={() => changeToolTo(Rect)}></button>
+      <button className='toolbar__btn circle' onClick={() => changeToolTo(Circle)}></button>
+      <button className='toolbar__btn eraser' onClick={() => changeToolTo(Eraser)}></button>
+      <button className='toolbar__btn line' onClick={() => changeToolTo(Line)}></button>
       <input type='color' onChange={changeColor} style={{ margin: '0 5px' }} />
       <button className='toolbar__btn undo' onClick={() => canvasState.undo()}></button>
       <button className='toolbar__btn redo' onClick={() => canvasState.redo()}></button>

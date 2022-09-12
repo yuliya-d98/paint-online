@@ -1,3 +1,4 @@
+import toolState from "../store/toolState";
 import Tool from "./tool";
 
 class Rect extends Tool {
@@ -7,30 +8,16 @@ class Rect extends Tool {
   }
 
   listen() {
+    this.canvas.onmousedown = this.mouseDownHandler.bind(this);
     this.canvas.onmousemove = this.mouseMoveHandler.bind(this);
     this.canvas.onmouseup = this.mouseUpHandler.bind(this);
-    this.canvas.onmousedown = this.mouseDownHandler.bind(this);
-  }
-
-  mouseUpHandler(e) {
-    this.mouseDown = false;
-    this.socket.send(
-      JSON.stringify({
-        method: "draw",
-        id: this.sessionId,
-        figure: {
-          type: "rect",
-          x: this.startX,
-          y: this.startY,
-          width: this.width,
-          height: this.height,
-        },
-      })
-    );
   }
 
   mouseDownHandler(e) {
     this.mouseDown = true;
+    this.ctx.fillStyle = toolState.tool.ctx.fillStyle;
+    this.ctx.strokeStyle = toolState.tool.ctx.strokeStyle;
+    this.ctx.lineWidth = toolState.tool.ctx.lineWidth;
     this.ctx.beginPath();
     this.startX = e.pageX - e.target.offsetLeft;
     this.startY = e.pageY - e.target.offsetTop;
@@ -47,6 +34,25 @@ class Rect extends Tool {
     }
   }
 
+  mouseUpHandler(e) {
+    this.mouseDown = false;
+    this.socket.send(
+      JSON.stringify({
+        method: "draw",
+        id: this.sessionId,
+        figure: {
+          type: "rect",
+          x: this.startX,
+          y: this.startY,
+          width: this.width,
+          height: this.height,
+          color: toolState.tool.ctx.fillStyle,
+          lineWidth: toolState.tool.ctx.lineWidth,
+        },
+      })
+    );
+  }
+
   draw(x, y, w, h) {
     const img = new Image();
     img.src = this.saved;
@@ -61,6 +67,8 @@ class Rect extends Tool {
   }
 
   static staticDraw(ctx, x, y, w, h, color, lineWidth) {
+    const prevColor = ctx.fillStyle;
+    const prevWidth = ctx.lineWidth;
     ctx.lineWidth = lineWidth;
     ctx.fillStyle = color;
     ctx.strokeStyle = color;
@@ -68,6 +76,9 @@ class Rect extends Tool {
     ctx.rect(x, y, w, h);
     ctx.fill();
     ctx.stroke();
+    ctx.lineWidth = prevWidth;
+    ctx.fillStyle = prevColor;
+    ctx.strokeStyle = prevColor;
   }
 }
 

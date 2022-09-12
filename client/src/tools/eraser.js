@@ -1,21 +1,48 @@
+import toolState from "../store/toolState";
 import Brush from "./brush";
 
 class Eraser extends Brush {
-  listen() {
-    this.canvas.onmousemove = this.mouseMoveHandler("eraser").bind(this);
-    this.canvas.onmouseup = this.mouseUpHandler.bind(this);
-    this.canvas.onmousedown = this.mouseDownHandler.bind(this);
+  mouseDownHandler(e) {
+    this.prevColor = toolState.tool.ctx.strokeStyle;
+    this.ctx.fillStyle = "white";
+    this.ctx.strokeStyle = "white";
+    super.mouseDownHandler(e);
   }
 
-  static draw(ctx, x, y) {
+  mouseMoveHandler(e) {
+    if (this.mouseDown) {
+      this.socket.send(
+        JSON.stringify({
+          method: "draw",
+          id: this.sessionId,
+          figure: {
+            type: "eraser",
+            x: e.pageX - e.target.offsetLeft,
+            y: e.pageY - e.target.offsetTop,
+            lineWidth: toolState.tool.ctx.lineWidth,
+          },
+        })
+      );
+    }
+  }
+
+  mouseUpHandler(e) {
+    super.mouseUpHandler(e);
+    this.ctx.fillStyle = this.prevColor;
+    this.ctx.strokeStyle = this.prevColor;
+  }
+
+  static draw(ctx, x, y, lineWidth) {
     const prevColor = ctx.fillStyle;
+    const prevLineWidth = ctx.lineWidth;
     ctx.fillStyle = "white";
     ctx.strokeStyle = "white";
-    ctx.beginPath();
+    ctx.lineWidth = lineWidth;
     ctx.lineTo(x, y);
     ctx.stroke();
     ctx.fillStyle = prevColor;
     ctx.strokeStyle = prevColor;
+    ctx.lineWidth = prevLineWidth;
   }
 }
 

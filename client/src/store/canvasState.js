@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, toJS } from "mobx";
 
 class CanvasState {
   canvas = null;
@@ -7,6 +7,7 @@ class CanvasState {
   undoList = [];
   redoList = [];
   username = "";
+  info = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -64,6 +65,14 @@ class CanvasState {
 
   setSessionId(sessionId) {
     this.sessionId = sessionId;
+  }
+
+  setInfo(info) {
+    this.info = [...toJS(this.info), info];
+  }
+
+  removeInfo(body) {
+    this.info = [...toJS(this.info)].filter((info) => info.body !== body);
   }
 }
 

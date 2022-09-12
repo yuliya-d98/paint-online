@@ -10,6 +10,9 @@ import { useParams } from 'react-router-dom';
 import Eraser from '../tools/eraser';
 import Rect from '../tools/rect';
 import axios from 'axios';
+import Circle from '../tools/circle';
+import Line from '../tools/line';
+import { newToast } from '../util/newToast';
 
 const Canvas = observer(() => {
   const canvasRef = useRef();
@@ -42,6 +45,10 @@ const Canvas = observer(() => {
 
   const connectHandler = () => {
     const username = usernameRef.current.value;
+    if (!username) {
+      newToast('Error!', 'Fields should not be empty');
+      return;
+    };
     canvasState.setUsername(username);
     setIsModalOpen(false);
   }
@@ -53,11 +60,17 @@ const Canvas = observer(() => {
       case 'brush':
         Brush.draw(ctx, figure.x, figure.y, figure.color, figure.lineWidth);
         break;
-      case 'eraser':
-        Eraser.draw(ctx, figure.x, figure.y);
-        break;
       case 'rect':
         Rect.staticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.color, figure.lineWidth);
+        break;
+      case 'circle':
+        Circle.staticDraw(ctx, figure.x, figure.y, figure.radius, figure.color, figure.lineWidth);
+        break;
+      case 'eraser':
+        Eraser.draw(ctx, figure.x, figure.y, figure.lineWidth);
+        break;
+      case 'line':
+        Line.draw(ctx, figure.x1, figure.y1, figure.x2, figure.y2, figure.color, figure.lineWidth);
         break;
       case 'finish':
         ctx.beginPath();
@@ -76,19 +89,19 @@ const Canvas = observer(() => {
       toolState.setTool(new Brush(canvasRef.current, socket, sessionId));
 
       socket.onopen = () => {
-        console.log('сщединение установлено!!!!!!!');
         socket.send(JSON.stringify({
           id: sessionId,
           username: canvasState.username,
           method: 'connection',
         }))
+        newToast('Connection', 'Connection established');
       }
 
       socket.onmessage = (event) => {
         let msg = JSON.parse(event.data);
         switch (msg.method) {
           case 'connection':
-            console.log(`Пользователь ${msg.username} присоединился.`);
+            newToast('New user', `User ${msg.username} joined`)
             break;
           case 'draw':
             drawHandler(msg);

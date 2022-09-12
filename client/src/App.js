@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Canvas from "./components/Canvas";
 import SettingBar from "./components/SettingBar";
+import Toasts from "./components/Toasts";
 import Toolbar from "./components/Toolbar";
 import "./styles/app.scss";
 
 function App() {
   return (
-    // <HashRouter basename="/">
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route
@@ -16,6 +16,7 @@ function App() {
               <Toolbar />
               <SettingBar />
               <Canvas />
+              <Toasts />
             </div>
           }
         />
@@ -25,7 +26,6 @@ function App() {
         />
       </Routes>
     </BrowserRouter>
-    // </HashRouter>
   );
 }
 
