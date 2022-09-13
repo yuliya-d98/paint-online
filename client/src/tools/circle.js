@@ -24,7 +24,8 @@ class Circle extends Tool {
           x: this.startX,
           y: this.startY,
           radius: this.radius,
-          color: toolState.tool.ctx.fillStyle,
+          fillColor: toolState.tool.ctx.fillStyle,
+          strokeColor: toolState.tool.ctx.strokeStyle,
           lineWidth: toolState.tool.ctx.lineWidth,
         },
       })
@@ -63,19 +64,20 @@ class Circle extends Tool {
     };
   }
 
-  static staticDraw(ctx, x, y, radius, color, lineWidth) {
-    const prevColor = ctx.fillStyle;
+  static staticDraw(ctx, x, y, radius, fillColor, strokeColor, lineWidth) {
+    const prevFillColor = ctx.fillStyle;
+    const prevStrokeColor = ctx.strokeStyle;
     const prevWidth = ctx.lineWidth;
     ctx.lineWidth = lineWidth;
-    ctx.fillStyle = color;
-    ctx.strokeStyle = color;
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = strokeColor;
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.stroke();
     ctx.lineWidth = prevWidth;
-    ctx.fillStyle = prevColor;
-    ctx.strokeStyle = prevColor;
+    ctx.fillStyle = prevFillColor;
+    ctx.strokeStyle = prevStrokeColor;
   }
 }
 

@@ -57,19 +57,19 @@ const Canvas = observer(() => {
     const ctx = canvasRef.current.getContext('2d');
     switch (figure.type) {
       case 'brush':
-        Brush.draw(ctx, figure.x, figure.y, figure.color, figure.lineWidth);
+        Brush.draw(ctx, figure.x, figure.y, figure.fillColor, figure.strokeColor, figure.lineWidth);
         break;
       case 'rect':
-        Rect.staticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.color, figure.lineWidth);
+        Rect.staticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.fillColor, figure.strokeColor, figure.lineWidth);
         break;
       case 'circle':
-        Circle.staticDraw(ctx, figure.x, figure.y, figure.radius, figure.color, figure.lineWidth);
+        Circle.staticDraw(ctx, figure.x, figure.y, figure.radius, figure.fillColor, figure.strokeColor, figure.lineWidth);
         break;
       case 'eraser':
         Eraser.draw(ctx, figure.x, figure.y, figure.lineWidth);
         break;
       case 'line':
-        Line.draw(ctx, figure.x1, figure.y1, figure.x2, figure.y2, figure.color, figure.lineWidth);
+        Line.draw(ctx, figure.x1, figure.y1, figure.x2, figure.y2, figure.fillColor, figure.strokeColor, figure.lineWidth);
         break;
       case 'finish':
         ctx.beginPath();

@@ -1,9 +1,9 @@
+import '../styles/toolbar.scss';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import canvasState from '../store/canvasState';
 import toolState from '../store/toolState';
-import '../styles/toolbar.scss';
 import Brush from '../tools/brush';
 import Circle from '../tools/circle';
 import Eraser from '../tools/eraser';

@@ -32,7 +32,8 @@ class Brush extends Tool {
             type: "brush",
             x: e.pageX - e.target.offsetLeft,
             y: e.pageY - e.target.offsetTop,
-            color: toolState.tool.ctx.fillStyle,
+            fillColor: toolState.tool.ctx.fillStyle,
+            strokeColor: toolState.tool.ctx.strokeStyle,
             lineWidth: toolState.tool.ctx.lineWidth,
           },
         })
@@ -53,17 +54,18 @@ class Brush extends Tool {
     );
   }
 
-  static draw(ctx, x, y, color, lineWidth) {
-    const prevColor = ctx.fillStyle;
+  static draw(ctx, x, y, fillColor, strokeColor, lineWidth) {
+    const prevFillColor = ctx.fillStyle;
+    const prevStrokeColor = ctx.strokeStyle;
     const prevWidth = ctx.lineWidth;
     ctx.lineWidth = lineWidth;
-    ctx.fillStyle = color;
-    ctx.strokeStyle = color;
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = strokeColor;
     ctx.lineTo(x, y);
     ctx.stroke();
     ctx.lineWidth = prevWidth;
-    ctx.fillStyle = prevColor;
-    ctx.strokeStyle = prevColor;
+    ctx.fillStyle = prevFillColor;
+    ctx.strokeStyle = prevStrokeColor;
   }
 }
 

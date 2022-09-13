@@ -46,7 +46,8 @@ class Rect extends Tool {
           y: this.startY,
           width: this.width,
           height: this.height,
-          color: toolState.tool.ctx.fillStyle,
+          fillColor: toolState.tool.ctx.fillStyle,
+          strokeColor: toolState.tool.ctx.strokeStyle,
           lineWidth: toolState.tool.ctx.lineWidth,
         },
       })
@@ -66,19 +67,20 @@ class Rect extends Tool {
     };
   }
 
-  static staticDraw(ctx, x, y, w, h, color, lineWidth) {
-    const prevColor = ctx.fillStyle;
+  static staticDraw(ctx, x, y, w, h, fillColor, strokeColor, lineWidth) {
+    const prevFillColor = ctx.fillStyle;
+    const prevStrokeColor = ctx.strokeStyle;
     const prevWidth = ctx.lineWidth;
     ctx.lineWidth = lineWidth;
-    ctx.fillStyle = color;
-    ctx.strokeStyle = color;
+    ctx.fillStyle = fillColor;
+    ctx.strokeStyle = strokeColor;
     ctx.beginPath();
     ctx.rect(x, y, w, h);
     ctx.fill();
     ctx.stroke();
     ctx.lineWidth = prevWidth;
-    ctx.fillStyle = prevColor;
-    ctx.strokeStyle = prevColor;
+    ctx.fillStyle = prevFillColor;
+    ctx.strokeStyle = prevStrokeColor;
   }
 }
 
