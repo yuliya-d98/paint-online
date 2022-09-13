@@ -67,7 +67,11 @@ class CanvasState {
     this.sessionId = sessionId;
   }
 
-  setInfo(info) {
+  setInfo(title, body) {
+    const info = {
+      title,
+      body,
+    };
     this.info = [...toJS(this.info), info];
   }
 

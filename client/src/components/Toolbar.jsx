@@ -9,16 +9,12 @@ import Circle from '../tools/circle';
 import Eraser from '../tools/eraser';
 import Line from '../tools/line';
 import Rect from '../tools/rect';
+import TooltipItem from './Tooltip';
 
 const Toolbar = observer(() => {
   const params = useParams();
   const [socket, setSocket] = useState(null);
   const [sessionId, setSessionId] = useState(null);
-
-  const changeColor = (e) => {
-    const curColor = e.target.value;
-    toolState.setColor(curColor);
-  }
 
   const download = () => {
     const dataUrl = canvasState.canvas.toDataURL();
@@ -42,19 +38,30 @@ const Toolbar = observer(() => {
     toolState.setTool(new ToolClass(canvasState.canvas, socket, sessionId));
   }
 
+  const tools = [
+    { tooltip: 'Brush', classname: 'brush', onClick: () => changeToolTo(Brush) },
+    { tooltip: 'Rectangle', classname: 'rectangle', onClick: () => changeToolTo(Rect) },
+    { tooltip: 'Circle', classname: 'circle', onClick: () => changeToolTo(Circle) },
+    { tooltip: 'Eraser', classname: 'eraser', onClick: () => changeToolTo(Eraser) },
+    { tooltip: 'Line', classname: 'line', onClick: () => changeToolTo(Line) },
+    { tooltip: 'Undo', classname: 'undo', onClick: () => canvasState.undo() },
+    { tooltip: 'Redo', classname: 'redo', onClick: () => canvasState.redo() },
+    { tooltip: 'Save', classname: 'save', onClick: download },
+  ]
+
   return (
     <div className="toolbar">
-      <button className='toolbar__btn brush' onClick={() => changeToolTo(Brush)}></button>
-      <button className='toolbar__btn rect' onClick={() => changeToolTo(Rect)}></button>
-      <button className='toolbar__btn circle' onClick={() => changeToolTo(Circle)}></button>
-      <button className='toolbar__btn eraser' onClick={() => changeToolTo(Eraser)}></button>
-      <button className='toolbar__btn line' onClick={() => changeToolTo(Line)}></button>
-      <input type='color' onChange={changeColor} style={{ margin: '0 5px' }} />
-      <button className='toolbar__btn undo' onClick={() => canvasState.undo()}></button>
-      <button className='toolbar__btn redo' onClick={() => canvasState.redo()}></button>
-      <button className='toolbar__btn save' onClick={download}></button>
+      {tools.map((tool) => <ToolbarItem tooltip={tool.tooltip} classname={tool.classname} onClick={tool.onClick} key={tool.tooltip} />)}
     </div>
   )
 })
 
 export default Toolbar;
+
+const ToolbarItem = ({ tooltip, classname, onClick }) => {
+  return (
+    <TooltipItem text={tooltip}>
+      <button className={`toolbar__btn ${classname}`} onClick={onClick}></button>
+    </TooltipItem>
+  )
+}

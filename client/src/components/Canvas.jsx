@@ -12,7 +12,6 @@ import Rect from '../tools/rect';
 import axios from 'axios';
 import Circle from '../tools/circle';
 import Line from '../tools/line';
-import { newToast } from '../util/newToast';
 
 const Canvas = observer(() => {
   const canvasRef = useRef();
@@ -46,7 +45,7 @@ const Canvas = observer(() => {
   const connectHandler = () => {
     const username = usernameRef.current.value;
     if (!username) {
-      newToast('Error!', 'Fields should not be empty');
+      canvasState.setInfo('Error!', 'Fields should not be empty');
       return;
     };
     canvasState.setUsername(username);
@@ -94,14 +93,14 @@ const Canvas = observer(() => {
           username: canvasState.username,
           method: 'connection',
         }))
-        newToast('Connection', 'Connection established');
+        canvasState.setInfo('Connection', 'Connection established');
       }
 
       socket.onmessage = (event) => {
         let msg = JSON.parse(event.data);
         switch (msg.method) {
           case 'connection':
-            newToast('New user', `User ${msg.username} joined`)
+            canvasState.setInfo('New user', `User ${msg.username} joined`)
             break;
           case 'draw':
             drawHandler(msg);

@@ -12,8 +12,11 @@ class ToolState {
     this.tool = tool;
   }
 
-  setColor(color) {
+  setFillColor(color) {
     this.tool.ctx.fillStyle = color;
+  }
+
+  setStrokeColor(color) {
     this.tool.ctx.strokeStyle = color;
   }
 
