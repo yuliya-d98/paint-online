@@ -27,8 +27,10 @@ const UsernameModal = () => {
   }
 
   const connectHandler = () => {
-    canvasState.setUsername(username);
-    setIsModalOpen(false);
+    if (!error) {
+      canvasState.setUsername(username);
+      setIsModalOpen(false);
+    }
   }
 
   return (
