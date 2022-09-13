@@ -1,22 +1,19 @@
+import axios from 'axios';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useRef, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import { useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import canvasState from '../store/canvasState';
 import toolState from '../store/toolState';
 import '../styles/canvas.scss';
 import Brush from '../tools/brush';
-import { useParams } from 'react-router-dom';
-import Eraser from '../tools/eraser';
-import Rect from '../tools/rect';
-import axios from 'axios';
 import Circle from '../tools/circle';
+import Eraser from '../tools/eraser';
 import Line from '../tools/line';
+import Rect from '../tools/rect';
+import UsernameModal from './UsernameModal';
 
 const Canvas = observer(() => {
   const canvasRef = useRef();
-  const usernameRef = useRef();
-  const [isModalOpen, setIsModalOpen] = useState(true);
   const params = useParams();
 
   const mouseDownHandler = () => {
@@ -41,16 +38,6 @@ const Canvas = observer(() => {
         };
       });
   }, [])
-
-  const connectHandler = () => {
-    const username = usernameRef.current.value;
-    if (!username) {
-      canvasState.setInfo('Error!', 'Fields should not be empty');
-      return;
-    };
-    canvasState.setUsername(username);
-    setIsModalOpen(false);
-  }
 
   const drawHandler = (msg) => {
     const figure = msg.figure;
@@ -114,19 +101,7 @@ const Canvas = observer(() => {
 
   return (
     <div className="canvas">
-      <Modal show={isModalOpen} onHide={connectHandler}>
-        <Modal.Header closeButton>
-          <Modal.Title>Write your name</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input ref={usernameRef} autoFocus />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={connectHandler}>
-            Enter
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <UsernameModal />
       <canvas width={600} height={400} ref={canvasRef} onMouseDown={mouseDownHandler}>
         Sorry, your browser doesn't support canvas.
       </canvas>

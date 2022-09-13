@@ -3,7 +3,7 @@ import toolState from "../store/toolState";
 import { observer } from 'mobx-react-lite';
 
 const SettingBar = observer(() => {
-  const [lineWidth, setLineWidth] = useState('1');
+  const [lineWidth, setLineWidth] = useState('5');
   const [fillColor, setFillColor] = useState('#80FF00');
   const [strokeColor, setStrokeColor] = useState('#FF0095');
 
