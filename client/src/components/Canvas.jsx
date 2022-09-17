@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
@@ -10,6 +9,7 @@ import Circle from '../tools/circle';
 import Eraser from '../tools/eraser';
 import Line from '../tools/line';
 import Rect from '../tools/rect';
+import { baseURL, instance } from '../utils/instance';
 import UsernameModal from './UsernameModal';
 
 const Canvas = observer(() => {
@@ -19,16 +19,16 @@ const Canvas = observer(() => {
   const mouseDownHandler = () => {
     const dataUrl = canvasRef.current.toDataURL();
     canvasState.pushToUndo(dataUrl);
-    axios
-      .post(`http://localhost:5000/image?id=${params.id}`, { img: dataUrl })
+    instance
+      .post(`/image?id=${params.id}`, { img: dataUrl })
       .then((res) => console.log(res.data));
   }
 
   useEffect(() => {
     canvasState.setCanvas(canvasRef.current);
     let ctx = canvasRef.current.getContext('2d')
-    axios
-      .get(`http://localhost:5000/image?id=${params.id}`)
+    instance
+      .get(`/image?id=${params.id}`)
       .then((res) => {
         const img = new Image();
         img.src = res.data;
@@ -68,7 +68,7 @@ const Canvas = observer(() => {
 
   useEffect(() => {
     if (canvasState.username) {
-      const socket = new WebSocket('ws://localhost:5000/');
+      const socket = new WebSocket(`ws://${baseURL}`);
       const sessionId = params.id;
       canvasState.setSocket(socket);
       canvasState.setSessionId(sessionId);
