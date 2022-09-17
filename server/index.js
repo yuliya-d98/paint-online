@@ -5,6 +5,7 @@ const aWss = WSserver.getWss();
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+const mongoose = require("mongoose");
 require("dotenv").config();
 
 mongoose.connect(process.env.MONGODB_URI, {
