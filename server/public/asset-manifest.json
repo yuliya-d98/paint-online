@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/paint-online/static/css/main.fbbc0c33.css",
+    "main.js": "/paint-online/static/js/main.943b6b5a.js",
+    "static/media/cursor.svg": "/paint-online/static/media/cursor.d1fb7ddfa762dbcf5abe.svg",
+    "static/media/eraser.svg": "/paint-online/static/media/eraser.9d5608975ba332f73ac6.svg",
+    "static/media/brush.svg": "/paint-online/static/media/brush.3900558e613e23582d38.svg",
+    "index.html": "/paint-online/index.html",
+    "static/media/circle.svg": "/paint-online/static/media/circle.ace27ac37d0ee3cff64f.svg",
+    "static/media/save.svg": "/paint-online/static/media/save.4e64b90fce1a466565c8.svg",
+    "static/media/rect.svg": "/paint-online/static/media/rect.7959de92d4f7f28fb0ef.svg",
+    "static/media/line.svg": "/paint-online/static/media/line.5c971bf346f62a9a1d29.svg",
+    "static/media/undo.svg": "/paint-online/static/media/undo.a2c39fdc77494f7ec995.svg",
+    "static/media/redo.svg": "/paint-online/static/media/redo.9ef4c7fc3a3da760609c.svg",
+    "main.fbbc0c33.css.map": "/paint-online/static/css/main.fbbc0c33.css.map",
+    "main.943b6b5a.js.map": "/paint-online/static/js/main.943b6b5a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fbbc0c33.css",
+    "static/js/main.943b6b5a.js"
+  ]
+}

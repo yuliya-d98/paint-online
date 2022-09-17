@@ -5,10 +5,28 @@ const aWss = WSserver.getWss();
 const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
+require("dotenv").config();
+
+mongoose.connect(process.env.MONGODB_URI, {
+  keepAlive: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// source: https://gist.github.com/ross-u/a1e67a0c366fd03d0f46218159163f7c#10-update-the-servers-cors-settings-
+// CORS SETTINGS TO ALLOW CROSS-ORIGIN INTERACTION:
+app.use(
+  cors({
+    credentials: true,
+    origin: [
+      "http://localhost:5000",
+      "http://paint-online-yuliya-d98.herokuapp.com", // <-- ADD
+      "https://paint-online-yuliya-d98.herokuapp.com", // <-- ADD
+    ],
+  })
+);
 app.use(express.json());
 
 app.ws("/", (ws, req) => {
@@ -71,3 +89,10 @@ const broadcastConnection = (ws, msg) => {
     }
   });
 };
+
+// source: https://gist.github.com/ross-u/a1e67a0c366fd03d0f46218159163f7c#3-setup-the-client-react-app-and-create-the-build
+// ROUTE FOR SERVING REACT APP (index.html)
+app.use((req, res, next) => {
+  // If no previous routes match the request, send back the React app.
+  res.sendFile(__dirname + "/public/index.html");
+});
