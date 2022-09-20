@@ -6,9 +6,11 @@ const cors = require("cors");
 const fs = require("fs");
 const path = require("path");
 const mongoose = require("mongoose");
-require("dotenv").config();
+require("dotenv").config(); // для доступа к process.env
 
-mongoose.connect(process.env.MONGODB_URI, {
+const mongoDbUri = `mongodb+srv://yuliya-d98:987654321@cluster0.zju71uf.mongodb.net/?retryWrites=true&w=majority`;
+
+mongoose.connect(process.env.MONGODB_URI || mongoDbUri, {
   keepAlive: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -22,12 +24,13 @@ app.use(
   cors({
     credentials: true,
     origin: [
-      "http://localhost:5000",
+      "http://localhost:3000",
       "http://paint-online-yuliya-d98.herokuapp.com", // <-- ADD
       "https://paint-online-yuliya-d98.herokuapp.com", // <-- ADD
     ],
   })
 );
+// app.use(cors());
 app.use(express.json());
 
 app.ws("/", (ws, req) => {
