@@ -18,6 +18,7 @@ mongoose.connect(process.env.MONGODB_URI || mongoDbUri, {
 
 const PORT = process.env.PORT || 5000;
 
+app.use(express.json());
 // source: https://gist.github.com/ross-u/a1e67a0c366fd03d0f46218159163f7c#10-update-the-servers-cors-settings-
 // CORS SETTINGS TO ALLOW CROSS-ORIGIN INTERACTION:
 app.use(
@@ -25,17 +26,20 @@ app.use(
     credentials: true,
     origin: [
       "http://localhost:3000",
-      "http://paint-online-yuliya-d98.herokuapp.com", // <-- ADD
-      "https://paint-online-yuliya-d98.herokuapp.com", // <-- ADD
+      "http://paint-online-yuliya-d98.herokuapp.com",
+      "https://paint-online-yuliya-d98.herokuapp.com",
     ],
   })
 );
-// app.use(cors());
-app.use(express.json());
+// source: https://gist.github.com/ross-u/a1e67a0c366fd03d0f46218159163f7c#3-setup-the-client-react-app-and-create-the-build
+// ROUTE FOR SERVING REACT APP (index.html)
+// app.use((req, res, next) => {
+//   // If no previous routes match the request, send back the React app.
+//   res.sendFile(__dirname + "/public/index.html");
+// });
 
 app.ws("/", (ws, req) => {
-  console.log("подключение установлено", ws, req);
-  // ws.send("Ты успешно подключился");
+  // console.log("подключение установлено", ws, req);
   ws.on("message", (msg) => {
     msg = JSON.parse(msg);
     switch (msg.method) {
@@ -63,6 +67,7 @@ app.post("/image", (req, res) => {
     return res.status(500).json("error");
   }
 });
+
 app.get("/image", (req, res) => {
   try {
     const pathToFile = path.resolve(__dirname, "files", `${req.query.id}.jpg`);
@@ -93,10 +98,3 @@ const broadcastConnection = (ws, msg) => {
     }
   });
 };
-
-// source: https://gist.github.com/ross-u/a1e67a0c366fd03d0f46218159163f7c#3-setup-the-client-react-app-and-create-the-build
-// ROUTE FOR SERVING REACT APP (index.html)
-app.use((req, res, next) => {
-  // If no previous routes match the request, send back the React app.
-  res.sendFile(__dirname + "/public/index.html");
-});

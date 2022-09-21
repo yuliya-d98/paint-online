@@ -1,8 +1,13 @@
 import axios from "axios";
 
-export const baseURL = process.env.REACT_APP_API_URL;
+const baseURL = process.env.REACT_APP_API_URL;
 
 export const instance = axios.create({
-  baseURL: `https://${baseURL}`,
-  withCredentials: true,
+  baseURL: baseURL,
+  // withCredentials: true,
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+  },
 });

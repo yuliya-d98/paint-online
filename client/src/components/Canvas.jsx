@@ -9,8 +9,10 @@ import Circle from '../tools/circle';
 import Eraser from '../tools/eraser';
 import Line from '../tools/line';
 import Rect from '../tools/rect';
-import { baseURL, instance } from '../utils/instance';
+import { instance } from '../utils/instance';
 import UsernameModal from './UsernameModal';
+
+const socketURL = process.env.REACT_APP_SOCKET_URL;
 
 const Canvas = observer(() => {
   const canvasRef = useRef();
@@ -68,33 +70,45 @@ const Canvas = observer(() => {
 
   useEffect(() => {
     if (canvasState.username) {
-      const socket = new WebSocket(`ws://${baseURL}`);
+      const socket = new WebSocket(socketURL);
       const sessionId = params.id;
       canvasState.setSocket(socket);
       canvasState.setSessionId(sessionId);
       toolState.setTool(new Brush(canvasRef.current, socket, sessionId));
 
       socket.onopen = () => {
-        socket.send(JSON.stringify({
-          id: sessionId,
-          username: canvasState.username,
-          method: 'connection',
-        }))
-        canvasState.setInfo('Connection', 'Connection established');
+        try {
+          socket.send(JSON.stringify({
+            id: sessionId,
+            username: canvasState.username,
+            method: 'connection',
+          }))
+          canvasState.setInfo('Connection', 'Connection established');
+        } catch (e) {
+          canvasState.setInfo('Error', e.message);
+        }
       }
 
       socket.onmessage = (event) => {
-        let msg = JSON.parse(event.data);
-        switch (msg.method) {
-          case 'connection':
-            canvasState.setInfo('New user', `User ${msg.username} joined`)
-            break;
-          case 'draw':
-            drawHandler(msg);
-            break;
-          default:
-            break;
+        try {
+          let msg = JSON.parse(event.data);
+          switch (msg.method) {
+            case 'connection':
+              canvasState.setInfo('New user', `User ${msg.username} joined`)
+              break;
+            case 'draw':
+              drawHandler(msg);
+              break;
+            default:
+              break;
+          }
+        } catch (e) {
+          canvasState.setInfo('Error', e.message);
         }
+      }
+
+      socket.onerror = (error) => {
+        canvasState.setInfo('Error', error.message);
       }
     }
   }, [canvasState.username])
