@@ -28,6 +28,7 @@ app.use(
       "http://localhost:3000",
       "http://paint-online-yuliya-d98.herokuapp.com",
       "https://paint-online-yuliya-d98.herokuapp.com",
+      "https://yuliya-d98.github.io",
     ],
   })
 );
