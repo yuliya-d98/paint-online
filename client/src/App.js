@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import Canvas from "./components/Canvas";
 import SettingBar from "./components/SettingBar";
 import Toasts from "./components/Toasts";
@@ -7,7 +7,8 @@ import "./styles/app.scss";
 
 function App() {
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    // <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <HashRouter basename="/">
       <Routes>
         <Route
           path="/:id"
@@ -25,7 +26,8 @@ function App() {
           element={<Navigate to={`/f${(+new Date()).toString(16)}`} replace />}
         />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
+    // </BrowserRouter>
   );
 }
 
