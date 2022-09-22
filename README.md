@@ -1,7 +1,11 @@
-## to run server:
+## Deployment
 
-npm run dev
+**[client](https://yuliya-d98.github.io/paint-online/)**
 
-## to run client:
+[server](https://paint-online-yuliya-d98.herokuapp.com)
 
-npm start
+## or open manually:
+
+- to run server: **npm run dev**
+
+- to run client: **npm start**
